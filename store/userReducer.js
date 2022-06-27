@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { catchAsyncDispatch } from '../uitl'
 
 const { reducer, actions } = createSlice({
   name: 'user',
@@ -19,30 +20,46 @@ const { reducer, actions } = createSlice({
       loading: false,
       error: action.payload
     }),
+    resetErrorMessage: (state, action) => ({    // just for redux store readability
+      ...state,
+      loading: false,
+      error: ''
+    }),
+    signUpUser: (state, action) => ({
+      ...state,
+      loading: false,
+      user: action.payload
+    }),
     loginUser: (state, action) => ({
       ...state,
       loading: false,
       user: action.payload
-    })
+    }),
   } // end of reducers
 })
 export default reducer
 
 
+// /pages/signup.js  =>  changeHandler
 export const showError = (message='') => (dispatch) => {
-  dispatch(actions.failed(message))
+  // console.log('showError called')
+  message 
+    ? dispatch(actions.failed(message))
+    : dispatch(actions.resetErrorMessage())
 }
 
-export const loginUser = (data) => async (dispatch) => {
-  try {
-    
-  dispatch(actions.requested)
-  const { data: { user } } = await axios.post('/api/users', data)
+
+// /pages/signup.js => submitHandler
+export const signUpUser = (data) => catchAsyncDispatch( async (dispatch) => {
+  dispatch(actions.requested())
+  const { data: { user } } = await axios.post('/api/users/signup', data)
+  dispatch(actions.signUpUser(user))
+}, actions.failed)
+
+
+// /pages/login.js => submitHandler
+export const loginUser = (data) => catchAsyncDispatch( async (dispatch) => {
+  dispatch(actions.requested())
+  const { data: { user } } = await axios.post('/api/users/login', data)
   dispatch(actions.loginUser(user))
-
-  } catch (error) {
-    // dispatch(actions.failed(error.data.response.message))    
-    console.log(error.message)
-    console.log(error.response.data.message)
-  }
-}
+}, actions.failed)

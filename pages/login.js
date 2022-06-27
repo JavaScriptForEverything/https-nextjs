@@ -1,76 +1,80 @@
-import Image from 'next/image'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, showError } from '../store/userReducer'
 
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
+import { wrapper } from '../store'
+import { parseCookies, setCookie } from 'nookies'
 
-import AddIcon from '@mui/icons-material/Add'
-import { Typography } from '@mui/material'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+
 
 const Login = () => {
+  const router = useRouter()
   const dispatch = useDispatch()
-  const [ avatar, setAvatar ] = useState({ public_url: '/users/user-2.jpg' })
+  const { user } = useSelector(state => state.users)
+
   const [ fields, setFields ] = useState({
-    avatar: ''
+    email: ''
+  })
+  const [ fieldsError, setFieldsError ] = useState({
+    email: 'empty email address'
   })
 
-  const { user, error } = useSelector(state => state.users)
-  // console.log(avatar)
+  // console.log({ user })
 
-  const changeHandler = (evt) => {
-    const image = evt.target.files[0]
-    const isImage = image.type.match('image/(jpeg|png)')?.[1]
-
-    if(!isImage) {
-      return dispatch(showError('Only "jpg/jpeg" or "png" image allowed'))
-    } else dispatch(showError(''))
-    
-    const reader = new FileReader()
-    reader.readAsDataURL(image)
-    reader.onload = () => {
-      if(reader.readyState === 2) {
-        setAvatar({
-          public_url: reader.result,
-          size: image.size
-        })
-      }
-    }
+  const changeHandler = (name) => (evt) => {
+    setFields({...fields, [name]: evt.target.value })
   }
 
   const submitHandler = (evt) => {
     evt.preventDefault()
 
-    dispatch(loginUser({ ...fields, avatar }))
+    dispatch(loginUser(fields))
+
+    console.log(fields)
   }
 
   return (
     <>
-
-    { error &&  <Typography>{error}</Typography> }
-
-    <Image 
-      // layout='responsive'
-      width={150}
-      height={150}
-      src={avatar.public_url}
-    />
+    <Button variant='outlined' onClick={() => router.push('/')} >Home</Button>
+    <Button variant='outlined' onClick={() => router.push('/signup')} >Sign Up</Button>
 
     <form onSubmit={submitHandler}>
       <TextField 
-        variant='outlined'
-        // margin='dense'
-        type='file'
-        // value={avatar}
-        onChange={changeHandler}
+          label='Email Address'
+          placeholder='abc@gmail.com'
+          type='email'
+          fullWidth
+
+          value={fields['email']}
+          onChange={changeHandler('email')}
+          error={!fields['email']}
+          helperText={fieldsError['email']}
       />
       <Button
         variant='outlined'
         type='submit'
       >Login</Button>
     </form>
+
     </>
   )
 }
 export default Login
+
+export const getServerSideProps = wrapper.getServerSideProps( ({ dispatch }) => (ctx) => {
+  // setCookie(ctx, 'token', 'mytoken', {
+  //   httpOnly: true,
+  //   secure: true,
+  //   maxAge: 60*60*24*30,
+  //   path: '/',
+  // })
+  const { token } = parseCookies(ctx, 'token')
+  console.log({ token })
+
+  // dispatch(showError(''))
+
+  return { props: { } }
+})

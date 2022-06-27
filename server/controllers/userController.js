@@ -1,34 +1,38 @@
-// import fs from 'fs'
 import path from 'path'
-import sharp from 'sharp'
+import { catchAsync, appError, uploadImage } from '../util'
 
-export const login = async (req, res, next) => {
-  try {
-    const { public_url } = req.body.avatar
-    if(!public_url) throw new Error('No file found')
 
-  const dataURL = req.body.avatar.public_url        // 1. get dataURL
-  const base64 = dataURL.split(';base64,').pop()    // 2. remove metadata only base64 encoded data
-  const buf = Buffer.from(base64, 'base64')         // 3. convert base64 data to Binary buffer
+export const signup = catchAsync( async (req, res, next) => {
 
-  // (/)  /.next/server/pages/api   => (/)  /public
-  const PUBLIC_ROOT = path.join(__dirname, '../../../../public') 
+  const PUBLIC_ROOT = path.join(__dirname, '../../../../../public')  // (/)  /.next/server/pages/api   => (/)  /public
+  const { error, image } = await uploadImage(req.body.avatar, PUBLIC_ROOT)
+  if(error) return next(appError(error))
 
-  await sharp(buf)
-    .resize(150, 150)
-    .toFormat('jpg')
-    .toFile(`${PUBLIC_ROOT}/avatar.jpg`)
+  console.log({ avatar: image })
 
   res.status(200).json({
     status: 'success',
-    user: 'ok'
+    user: {
+      avatar: image
+    }
   })
+})
 
-  } catch (err) {
-    res.status(400).json({
-      status: 'failed',
-      message: err.message
-    })
-  }
+export const login = catchAsync( async (req, res, next) => {
 
-}
+  // const PUBLIC_ROOT = path.join(__dirname, '../../../../public')  // (/)  /.next/server/pages/api   => (/)  /public
+  // const { error, image } = await uploadImage(req.body.avatar, PUBLIC_ROOT)
+  // if(error) return next(appError(error))
+
+
+  // res.setHeader('set-cookie', `token=mytoken; path=/; httponly; secure; expires=${Date.now() + 40000}` )
+  // const token = req.headers?.cookie.split('=').pop()
+  // console.log({ token })
+
+  res.status(200).json({
+    status: 'success',
+    user: {
+      // avatar: image
+    }
+  })
+})

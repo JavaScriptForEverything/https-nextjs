@@ -1,14 +1,17 @@
+import { useRouter } from 'next/router'
+
 import Typography from '@mui/material/Typography'
-import { } from 'react'
-import { useSelector } from 'react-redux'
+import Button from '@mui/material/Button'
 
 const Home = () => {
-  const { loading, error } = useSelector(state => state.users)
-  console.log({ loading, error })
+  const router = useRouter()
 
   return (
     <>
     <h2>Hello world</h2>
+
+    <Button variant='outlined' onClick={() => router.push('/login')} >login</Button>
+    <Button variant='outlined' onClick={() => router.push('/signup')} >Sign Up</Button>
 
     </>
   )
