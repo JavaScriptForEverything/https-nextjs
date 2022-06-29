@@ -1,19 +1,24 @@
 ## NextJS with all the common features with 'Best Practies'
 
-##### Redux dispatch in both Client-Side + Server-Side
+##### Redux 
 
 	. @reduxjs/toolkit  react-redux  next-redux-wrapper
+	. Client-Side Dispatch 
+	. Server-Side Dispatch
 
 
-##### Routing + Global Error handler like ExpressJS 
+##### Routing 
 
-	. next-connect 
+	. next-connect  	
+		. Expressing like routing
+		. Global Error Handler
 
 
-##### Image Upload + Resize
+##### Image 
 
-	. new FileReader() 	.readAsDataURL()
-	. sharp
+	. Generate dataURL of image via 	FileReader()
+	. Upload that image into Server's /public directory
+	. Resize image before save via 'sharp'
 
 
 ##### Form 
