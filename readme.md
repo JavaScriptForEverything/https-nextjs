@@ -16,3 +16,18 @@
 	. sharp
 
 
+##### Form 
+
+	. Dynamically create every form fields from arrayObject
+	. Custom formValidator function
+	. Show Errors if form Validation failed just bellow every field
+
+
+
+##### Connect to Database
+
+	. mongoose (MongoDB)
+	. Take environment variables to connect to database
+
+
+
