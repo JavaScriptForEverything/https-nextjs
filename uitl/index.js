@@ -52,7 +52,7 @@ export const formValidator = (fields, setFieldsError) => {
   
 
   Object.keys(fields).forEach(field => {
-    if( !fields[field].trim() ) tempObj[field] = `${field} field is empty`
+    if( !fields?.[field].trim() ) tempObj[field] = `${field} field is empty`
   })
   
   setFieldsError(tempObj)

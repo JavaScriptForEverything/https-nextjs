@@ -1,5 +1,6 @@
 import path from 'path'
 import { catchAsync, appError, uploadImage } from '../util'
+import User from '../models/userModel'
 
 
 export const signup = catchAsync( async (req, res, next) => {
@@ -19,6 +20,9 @@ export const signup = catchAsync( async (req, res, next) => {
 })
 
 export const login = catchAsync( async (req, res, next) => {
+
+  const users = await User.find()
+  // console.log({ users })
 
   // const PUBLIC_ROOT = path.join(__dirname, '../../../../public')  // (/)  /.next/server/pages/api   => (/)  /public
   // const { error, image } = await uploadImage(req.body.avatar, PUBLIC_ROOT)

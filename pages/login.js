@@ -34,7 +34,7 @@ const Login = () => {
 
   const submitHandler = (evt) => {
     evt.preventDefault()
-    // dispatch(loginUser(fields))
+    dispatch(loginUser(fields))
 
     if( !formValidator(fields, setFieldsError)) return 
     console.log(fields)
