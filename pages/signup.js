@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { signUpUser, showError } from '../store/userReducer'
 
-import { readAsDataURL } from '../uitl'
+import { formValidator, readAsDataURL } from '../uitl'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -12,19 +12,7 @@ import Typography from '@mui/material/Typography'
 
 import AddIcon from '@mui/icons-material/Add'
 
-const formValidator = (fields, setFieldsError) => {
-  const tempObj = {}
 
-  Object.keys(fields).forEach( field => {
-    if( fields[field] === '' ) {
-      tempObj[field] = `'${field}' field is empty`
-    }
-  })
-
-  console.log(tempObj)
-  setFieldsError(tempObj)
-  return Object.keys(tempObj).every(field => field === '')
-}
 
 
 const Signup = () => {
@@ -32,35 +20,37 @@ const Signup = () => {
   const router = useRouter()
   const [ avatar, setAvatar ] = useState('')
   const [ fields, setFields ] = useState({
-    avatar: ''
+    // avatar: ''
   })
   const [ fieldsError, setFieldsError ] = useState({
     avatar: ''
   })
 
   const { user, error } = useSelector(state => state.users)
-  console.log(user)
+  // console.log(user)
 
   const changeHandler = (evt) => {
     const file = evt.target.files[0]
     const { error: imageError } = readAsDataURL(file, setAvatar, { pdf: false })
-    setFields({ ...fields, avatar })
 
     if(imageError) {
       return dispatch(showError('Only "jpg/jpeg" or "png" image allowed'))
     } else dispatch(showError(''))
 
+    if(!formValidator(fields, setFieldsError)) return
+    setFields({ ...fields })
   }
+
 
   const submitHandler = (evt) => {
     evt.preventDefault()
 
     // const isFormValid = formValidator(fields, setFieldsError)
     // console.log( isFormValid )
-    // if(!isFormValid) return
-    // console.log( fields )
+    if(!formValidator(fields, setFieldsError)) return
+    console.log( fields )
 
-    dispatch(signUpUser({ ...fields, avatar }))
+    // dispatch(signUpUser({ ...fields, avatar }))
   }
 
   return (
@@ -83,6 +73,9 @@ const Signup = () => {
         variant='outlined'
         type='file'
         onChange={changeHandler}
+
+        error={!fields['avatar'] || !!fieldsError['avatar']}
+        helperText={fieldsError['avatar']}
       />
       <Button
         variant='outlined'

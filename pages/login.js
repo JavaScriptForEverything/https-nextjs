@@ -5,22 +5,26 @@ import { loginUser, showError } from '../store/userReducer'
 
 import { wrapper } from '../store'
 import { parseCookies, setCookie } from 'nookies'
+import { formValidator } from '../uitl'
 
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
+const inputItems = [
+  { name: 'email', type:'email', label: 'Email Address' },
+  { name: 'password', type:'password', label: 'Password' },
+  { name: 'confirmPassword', type:'password', label: 'confirmPassword' },
+]
+const arrayObject = {}
+inputItems.forEach(obj => arrayObject[obj.name] = '')
 
 const Login = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.users)
 
-  const [ fields, setFields ] = useState({
-    email: ''
-  })
-  const [ fieldsError, setFieldsError ] = useState({
-    email: 'empty email address'
-  })
+  const [ fields, setFields ] = useState({ ...arrayObject })
+  const [ fieldsError, setFieldsError ] = useState({ ...arrayObject })
 
   // console.log({ user })
 
@@ -30,9 +34,9 @@ const Login = () => {
 
   const submitHandler = (evt) => {
     evt.preventDefault()
+    // dispatch(loginUser(fields))
 
-    dispatch(loginUser(fields))
-
+    if( !formValidator(fields, setFieldsError)) return 
     console.log(fields)
   }
 
@@ -41,18 +45,20 @@ const Login = () => {
     <Button variant='outlined' onClick={() => router.push('/')} >Home</Button>
     <Button variant='outlined' onClick={() => router.push('/signup')} >Sign Up</Button>
 
-    <form onSubmit={submitHandler}>
-      <TextField 
-          label='Email Address'
-          placeholder='abc@gmail.com'
-          type='email'
-          fullWidth
+    <form onSubmit={submitHandler} noValidate>
+      { inputItems.map(({ name, type, label }) => (
+        <TextField key={name}
+            label={label}
+            placeholder={label}
+            type={type}
+            fullWidth
 
-          value={fields['email']}
-          onChange={changeHandler('email')}
-          error={!fields['email']}
-          helperText={fieldsError['email']}
-      />
+            value={fields[name]}
+            onChange={changeHandler(name)}
+            error={!fields[name]}
+            helperText={fieldsError[name]}
+        />
+      ))}
       <Button
         variant='outlined'
         type='submit'
@@ -64,17 +70,17 @@ const Login = () => {
 }
 export default Login
 
-export const getServerSideProps = wrapper.getServerSideProps( ({ dispatch }) => (ctx) => {
-  // setCookie(ctx, 'token', 'mytoken', {
-  //   httpOnly: true,
-  //   secure: true,
-  //   maxAge: 60*60*24*30,
-  //   path: '/',
-  // })
-  const { token } = parseCookies(ctx, 'token')
-  console.log({ token })
+// export const getServerSideProps = wrapper.getServerSideProps( ({ dispatch }) => (ctx) => {
+//   // setCookie(ctx, 'token', 'mytoken', {
+//   //   httpOnly: true,
+//   //   secure: true,
+//   //   maxAge: 60*60*24*30,
+//   //   path: '/',
+//   // })
+//   const { token } = parseCookies(ctx, 'token')
+//   console.log({ token })
 
-  // dispatch(showError(''))
+//   // dispatch(showError(''))
 
-  return { props: { } }
-})
+//   return { props: { } }
+// })

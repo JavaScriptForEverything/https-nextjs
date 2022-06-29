@@ -1,3 +1,4 @@
+import { isEmail } from 'validator'
 
 /* 	export const signUpUser = (data) => catchAsyncDispatch( async (dispatch) => {
 		  dispatch(actions.requested())
@@ -29,4 +30,31 @@ export const readAsDataURL = (file, setValue=f=>f, {pdf = false}={} ) => {
   }
 
   return { error, success: true }
+}
+
+
+
+/* 	const submitHandler = (evt) => {
+			evt.preventDefault()
+
+			if( !formValidator(fields, setFieldsError)) return 
+
+			console.log(fields)
+			// dispatch(loginUser(fields))
+		} */
+export const formValidator = (fields, setFieldsError) => {
+  const { email, password, confirmPassword } = fields || {}
+  const tempObj = {}
+
+  if( email && !isEmail(email) ) tempObj.email = `(${email}) is invalid email address`
+  if(confirmPassword !== password) tempObj.confirmPassword = 'password and confirmPassword not matched'
+  if(password?.length < 4) tempObj.password = 'password field must be atleast 4 charecter long'
+  
+
+  Object.keys(fields).forEach(field => {
+    if( !fields[field].trim() ) tempObj[field] = `${field} field is empty`
+  })
+  
+  setFieldsError(tempObj)
+  return Object.keys(tempObj).every(field => field === '')
 }
