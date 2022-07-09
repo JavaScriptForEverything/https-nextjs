@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, showError } from '../store/userReducer'
 
 import { wrapper } from '../store'
-import { parseCookies, setCookie } from 'nookies'
 import { formValidator } from '../uitl'
 
 import Button from '@mui/material/Button'
@@ -21,12 +20,11 @@ inputItems.forEach(obj => arrayObject[obj.name] = '')
 const Login = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { user } = useSelector(state => state.users)
+  const { user } = useSelector(state => state.user)
 
   const [ fields, setFields ] = useState({ ...arrayObject })
   const [ fieldsError, setFieldsError ] = useState({ ...arrayObject })
 
-  // console.log({ user })
 
   const changeHandler = (name) => (evt) => {
     setFields({...fields, [name]: evt.target.value })
@@ -44,6 +42,8 @@ const Login = () => {
     <>
     <Button variant='outlined' onClick={() => router.push('/')} >Home</Button>
     <Button variant='outlined' onClick={() => router.push('/signup')} >Sign Up</Button>
+
+
 
     <form onSubmit={submitHandler} noValidate>
       { inputItems.map(({ name, type, label }) => (

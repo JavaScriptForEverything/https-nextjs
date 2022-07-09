@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { HYDRATE } from 'next-redux-wrapper'
 import axios from 'axios'
 import { catchAsyncDispatch } from '../uitl'
+
+import { productReducer } from './productReducer'
+// console.log( productReducer )
 
 const { reducer, actions } = createSlice({
   name: 'user',
@@ -35,7 +39,31 @@ const { reducer, actions } = createSlice({
       loading: false,
       user: action.payload
     }),
-  } // end of reducers
+
+    test: (state, action) => {
+    	// console.log('payload: ', action.payload)
+    	// state.user.user = action.payload
+
+    	return {
+    		...state,
+    		loading: false,
+    		user: { ...state.user, ...action.payload }
+    		// ...action.payload
+    	}
+    },
+
+
+  }, // end of reducers
+	extraReducers: {
+		[HYDRATE]: (state, action) => {
+
+			return {
+				...state,
+				// ...action.payload
+				user: { ...state.user, ...action.payload }
+			}
+		}
+	}
 })
 export default reducer
 
@@ -63,3 +91,15 @@ export const loginUser = (data) => catchAsyncDispatch( async (dispatch) => {
   const { data: { user } } = await axios.post('/api/users/login', data)
   dispatch(actions.loginUser(user))
 }, actions.failed)
+
+
+
+
+
+export const test = (data) => (dispatch) => {
+	// console.log({ data })
+	dispatch(actions.requested())
+	dispatch(actions.test(data))
+}
+
+

@@ -5,6 +5,8 @@
 	. @reduxjs/toolkit  react-redux  next-redux-wrapper
 	. Client-Side Dispatch 
 	. Server-Side Dispatch
+	. Share redux state even page navigation
+	. Redux Middleware
 
 
 ##### Routing 
