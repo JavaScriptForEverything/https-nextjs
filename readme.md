@@ -16,14 +16,14 @@
 		. Global Error Handler
 
 
-##### Image 
+##### Image Upload
 
 	. Generate dataURL of image via 	FileReader()
 	. Upload that image into Server's /public directory
 	. Resize image before save via 'sharp'
 
 
-##### Form 
+##### Form Validation
 
 	. Dynamically create every form fields from arrayObject
 	. Custom formValidator function
@@ -35,6 +35,16 @@
 
 	. mongoose (MongoDB)
 	. Take environment variables to connect to database
+
+
+##### Authentication
+
+	. Authentication via cookie instead of save token in in secure localStorage
+	. Protecte /profile route, when not loged in
+	. Protecte /login or /signup route, when loged in
+	. if token verification success then redirect to /profile route
+
+
 
 
 
