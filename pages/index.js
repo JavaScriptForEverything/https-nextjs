@@ -1,25 +1,18 @@
 import { wrapper } from '../store'
-import { test } from '../store/userReducer'
+import { logoutUser } from '../store/userReducer'
 import { useRouter } from 'next/router'
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
 
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
 const Home = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const logoutHandler = async () => {
 
-  	try {
-	  	const { data: { status }} = await axios.post(`/api/users/logout`, {})
-	  	if(status='success') router.push('/profile')
-
-	  	router.push('/login')
-
-  	} catch (err) {
-  		console.log(err)
-  	}
+  	dispatch(logoutUser())
   }
 
 
@@ -31,6 +24,7 @@ const Home = () => {
     <Button variant='outlined' onClick={() => router.push('/signup')} >Sign Up</Button>
     <Button variant='outlined' onClick={logoutHandler} >Logout</Button>
     <Button variant='outlined' onClick={() => router.push('/about')} >About</Button>
+    <Button variant='outlined' onClick={() => router.push('/profile')} >Profile</Button>
 
     </>
   )

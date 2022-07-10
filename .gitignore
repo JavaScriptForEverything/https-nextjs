@@ -1,7 +1,8 @@
-.next
-node_modules
+.next/
+node_modules/
 *.log
 
 .env
-public
+public/
 !/public/favicon.ico
+

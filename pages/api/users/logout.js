@@ -1,10 +1,13 @@
-// import '../../../server/models/database'
+import '../../../server/models/database'
 import nc from 'next-connect'
-import * as userController from '../../../server/controllers/userController'
 const morgan = require('morgan')
+import * as userController from '../../../server/controllers/userController'
+import { onError } from '../../../server/util'
 
-const handler = nc()
+const router = nc({ onError })
 
-handler
-	.use(morgan('dev'))
-	.post(userController.logout)
+router
+  .use(morgan('dev'))
+  .post( userController.logout )
+
+export default router

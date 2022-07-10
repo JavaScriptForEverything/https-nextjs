@@ -45,7 +45,7 @@ export const uploadImage = async (image={}, destination) => {
   let error = ''
 
   // 1. Get image as dataURL
-  const dataURL = image?.public_url                 
+  const dataURL = image?.secure_url
   if(!dataURL) return error = 'No image found'
 
   const isValidDataURL = dataURL.startsWith('data:')
@@ -58,17 +58,18 @@ export const uploadImage = async (image={}, destination) => {
   const buf = Buffer.from(base64, 'base64')         
 
   // 4. Save image from buffer  
-  const uniqueName = nanoid()
-  const public_url = `${uniqueName}.jpg`
+  const public_id = nanoid()
+  const file = `${destination}/${public_id}.jpg`
+  const secure_url = file.split('/public').pop()
 
   await sharp(buf)
     .resize(150, 150)
     .toFormat('jpg')
-    .toFile(`${destination}/${public_url}`)
+    .toFile(file)
   
   // 5. Return image or error just node style:  (err, (success) => )
   return {
     error,
-    image: { public_url, size: image.size }
+    image: { public_id, size: image.size, secure_url }
   }
 }

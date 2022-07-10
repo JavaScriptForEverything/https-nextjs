@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { verify } from 'jsonwebtoken'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, showError } from '../store/userReducer'
+import { loginUser, showError, authenticateUser } from '../store/userReducer'
 
 import { wrapper } from '../store'
 import { formValidator } from '../uitl'
@@ -12,7 +13,7 @@ import TextField from '@mui/material/TextField'
 const inputItems = [
   { name: 'email', type:'email', label: 'Email Address' },
   { name: 'password', type:'password', label: 'Password' },
-  { name: 'confirmPassword', type:'password', label: 'confirmPassword' },
+  // { name: 'confirmPassword', type:'password', label: 'confirmPassword' },
 ]
 const arrayObject = {}
 inputItems.forEach(obj => arrayObject[obj.name] = '')
@@ -25,6 +26,14 @@ const Login = () => {
   const [ fields, setFields ] = useState({ ...arrayObject })
   const [ fieldsError, setFieldsError ] = useState({ ...arrayObject })
 
+  const { status } = useSelector(state => state.user)
+
+  useEffect(() => {
+  	if(status === 'success') {
+  		dispatch( authenticateUser(true) )
+  		router.push('/profile')
+  	}
+  }, [status])
 
   const changeHandler = (name) => (evt) => {
     setFields({...fields, [name]: evt.target.value })
@@ -32,10 +41,10 @@ const Login = () => {
 
   const submitHandler = (evt) => {
     evt.preventDefault()
-    dispatch(loginUser(fields))
 
-    if( !formValidator(fields, setFieldsError)) return 
-    console.log(fields)
+    if( !formValidator(fields, setFieldsError)) return console.log(fieldsError)
+    // console.log(fields)
+    dispatch(loginUser(fields))
   }
 
   return (
@@ -70,17 +79,22 @@ const Login = () => {
 }
 export default Login
 
-// export const getServerSideProps = wrapper.getServerSideProps( ({ dispatch }) => (ctx) => {
-//   // setCookie(ctx, 'token', 'mytoken', {
-//   //   httpOnly: true,
-//   //   secure: true,
-//   //   maxAge: 60*60*24*30,
-//   //   path: '/',
-//   // })
-//   const { token } = parseCookies(ctx, 'token')
-//   console.log({ token })
+export const getServerSideProps = (ctx) => {
+	const { token } = ctx.req.cookies || {}
+	if( !token )	return { props: {} }
 
-//   // dispatch(showError(''))
+	try {
+		const TOKEN_SECRET = process.env.TOKEN_SECRET
+		const { _id, iat } = verify(token, TOKEN_SECRET)
 
-//   return { props: { } }
-// })
+		return { redirect: {
+			destination: '/profile',
+			parmanent: false
+		}}
+
+	} catch (err) {
+		console.log(err.message)
+	}
+
+	return { props: {} }
+}

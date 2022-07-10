@@ -30,17 +30,17 @@ const About = () => {
 export default About
 
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => ({ req }) => {
+// export const getServerSideProps = wrapper.getServerSideProps((store) => ({ req }) => {
 
-	// let state = store.getState()
-	// 		state = state.user
+// 	// let state = store.getState()
+// 	// 		state = state.user
 
-	// 		console.log(state)
+// 	// 		console.log(state)
 
-	const data = {
-		email: 'abc@gmail.com',
-		authenticated: true
-	}
-	store.dispatch(test(data))
+// 	const data = {
+// 		email: 'abc@gmail.com',
+// 		authenticated: true
+// 	}
+// 	store.dispatch(test(data))
 
-})
+// })

@@ -26,7 +26,7 @@ export const readAsDataURL = (file, setValue=f=>f, {pdf = false}={} ) => {
   const reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = () => {
-    if(reader.readyState === 2) setValue({ public_url: reader.result, size: file.size })
+    if(reader.readyState === 2) setValue({ secure_url: reader.result, size: file.size })
   }
 
   return { error, success: true }
@@ -47,7 +47,7 @@ export const formValidator = (fields, setFieldsError) => {
   const tempObj = {}
 
   if( email && !isEmail(email) ) tempObj.email = `(${email}) is invalid email address`
-  if(confirmPassword !== password) tempObj.confirmPassword = 'password and confirmPassword not matched'
+  if(confirmPassword && confirmPassword !== password) tempObj.confirmPassword = 'password and confirmPassword not matched'
   if(password?.length < 4) tempObj.password = 'password field must be atleast 4 charecter long'
   
 
