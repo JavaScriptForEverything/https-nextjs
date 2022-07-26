@@ -69,19 +69,6 @@ const { reducer, actions } = createSlice({
       user: {}
     }),
 
-    test: (state, action) => {
-    	// console.log('payload: ', action.payload)
-    	// state.user.user = action.payload
-
-    	return {
-    		...state,
-    		loading: false,
-    		user: { ...state.user, ...action.payload }
-    		// ...action.payload
-    	}
-    },
-
-
   }, // end of reducers
 	extraReducers: {
 		[HYDRATE]: (state, action) => {
