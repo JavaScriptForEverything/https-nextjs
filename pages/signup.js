@@ -66,7 +66,7 @@ const Signup = () => {
     // console.log( isFormValid )
     // setFields({ ...fields, avatar })
     if(!formValidator(fields, setFieldsError)) return
-    // console.log({ ...fields, avatar })
+    console.log({ ...fields, avatar })
 
     dispatch(signUpUser({ ...fields, avatar }))
   }

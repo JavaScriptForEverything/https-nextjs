@@ -66,3 +66,24 @@ export const logout = (req, res, next) => {
 
   res.status(201).json({ status: 'success' })
 }
+
+
+export const updateMe = (req, res, next) => {
+
+	console.log(req.body)
+
+	try {
+		res.status(201).json({
+			status: 'success',
+			user: req.body
+		})
+
+	} catch (err) {
+
+		res.status(400).json({
+			status: 'failed',
+			message: err.message
+		})
+	}
+
+}

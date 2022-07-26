@@ -1,5 +1,2 @@
-const axios = require('axios')
+console.log(fetch)
 
-axios.post('http://localhost:3000/api/users/logout', {})
-.then(console.log)
-.catch(err => console.log(err.message))
