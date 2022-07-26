@@ -1,5 +1,17 @@
 ## NextJS with all the common features with 'Best Practies'
 
+##### HTTPS
+	. Generate SSL Certificates by bellow commands: (Nothing more)
+
+		. $ yarn create-ca
+		. $ yarn create-cert
+
+	. if want to show secure flug in browser then add `ca.key` into you browser
+
+	Firefox: Add certificate to browser
+	Setting > (search) certificates > View Certificaties > Authorities > Import > /ssl/ca.key
+
+
 ##### Redux 
 
 	. @reduxjs/toolkit  react-redux  next-redux-wrapper
@@ -7,6 +19,8 @@
 	. Server-Side Dispatch
 	. Share redux state even page navigation
 	. Redux Middleware
+
+	. Keep store value available on page navigation too.
 
 
 ##### Routing 

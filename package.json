@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "create-ca": "mkdir ssl && cd ssl && mkcert create-ca",
+    "create-cert": "cd ssl && mkcert create-cert",
+    "dev": "nodemon server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -30,5 +32,9 @@
     "react-redux": "^8.0.2",
     "sharp": "^0.30.7",
     "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "mkcert": "^1.5.0",
+    "nodemon": "^2.0.19"
   }
 }
