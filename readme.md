@@ -5,11 +5,11 @@
 <div style="display: flex; justify-content: center">
 <img
 	width='45%'
-	src='https://github.com/JavaScriptForEverything/https-nodejs/blob/master/public/https-nextjs-1.png'
+	src='https://github.com/JavaScriptForEverything/https-nextjs/blob/master/public/https-nextjs-1.png'
 />
 <img
 	width='45%'
-	src='https://github.com/JavaScriptForEverything/https-nodejs/blob/master/public/https-nextjs-2.png'
+	src='https://github.com/JavaScriptForEverything/https-nextjs/blob/master/public/https-nextjs-2.png'
 />
 <div>
 
