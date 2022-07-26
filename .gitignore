@@ -3,8 +3,12 @@ node_modules/
 *.log
 
 .env
-public/
-!/public/favicon.ico
+
+public/images
+# public/
+# !/public/favicon.ico
+# !/public/https-nextjs-1.png
+# !/public/https-nextjs-2.png
 
 
 ssl/
